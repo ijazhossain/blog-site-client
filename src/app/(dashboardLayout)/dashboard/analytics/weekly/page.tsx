@@ -1,0 +1,9 @@
+function WeekPage() {
+  return (
+    <div>
+      <h1>Week</h1>
+    </div>
+  );
+}
+
+export default WeekPage;
