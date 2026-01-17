@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import { SearchForm } from "@/components/search-form";
-import { VersionSwitcher } from "@/components/version-switcher";
+
+
 import {
   Sidebar,
   SidebarContent,
@@ -18,6 +18,8 @@ import Link from "next/link";
 import { adminRoutes } from "@/app/routes/adminRoute";
 import { userRoutes } from "@/app/routes/userRoutes";
 import { Route } from "@/types";
+import { SearchForm } from "./search-form";
+import { VersionSwitcher } from "./version-switcher";
 
 // This is sample data.
 const data = {
