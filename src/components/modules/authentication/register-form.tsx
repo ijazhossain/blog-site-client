@@ -8,9 +8,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
 import { useForm } from "@tanstack/react-form";
+import { toast } from "sonner";
 import * as z from "zod";
 const formSchema = z.object({
   name: z.string().min(1, "This field is required"),
@@ -19,6 +26,13 @@ const formSchema = z.object({
 });
 
 export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
+  const handleGoogleLogin = async () => {
+    const data = authClient.signIn.social({
+      provider: "google",
+      callbackURL: "http://localhost:3000",
+    });
+    console.log(data);
+  };
   const form = useForm({
     defaultValues: {
       name: "",
@@ -30,7 +44,17 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
-      console.log(value);
+      const toastId = toast.loading("Creating user");
+      try {
+        const { data, error } = await authClient.signUp.email(value);
+        if (error) {
+          toast.error(error.message, { id: toastId });
+          return;
+        }
+        toast.success("User created successfully", { id: toastId });
+      } catch (err) {
+        toast.error("Internal server error", { id: toastId });
+      }
     },
   });
   return (
@@ -54,9 +78,9 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
               name="name"
               children={(field) => {
                 const isInvalid =
-          field.state.meta.isTouched && !field.state.meta.isValid
+                  field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
-                  <Field  data-invalid={isInvalid}>
+                  <Field data-invalid={isInvalid}>
                     <FieldLabel htmlFor={field.name}>Name</FieldLabel>
                     <Input
                       type="text"
@@ -65,7 +89,9 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                     />
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
                   </Field>
                 );
               }}
@@ -73,10 +99,10 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
             <form.Field
               name="email"
               children={(field) => {
-                 const isInvalid =
-          field.state.meta.isTouched && !field.state.meta.isValid
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
-                  <Field  data-invalid={isInvalid}>
+                  <Field data-invalid={isInvalid}>
                     <FieldLabel htmlFor={field.name}>Email</FieldLabel>
                     <Input
                       type="email"
@@ -85,7 +111,9 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                     />
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
                   </Field>
                 );
               }}
@@ -93,10 +121,10 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
             <form.Field
               name="password"
               children={(field) => {
-                 const isInvalid =
-          field.state.meta.isTouched && !field.state.meta.isValid
+                const isInvalid =
+                  field.state.meta.isTouched && !field.state.meta.isValid;
                 return (
-                  <Field  data-invalid={isInvalid}>
+                  <Field data-invalid={isInvalid}>
                     <FieldLabel htmlFor={field.name}>Password</FieldLabel>
                     <Input
                       type="password"
@@ -105,7 +133,9 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                     />
-                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
                   </Field>
                 );
               }}
@@ -113,9 +143,17 @@ export function RegisterForm({ ...props }: React.ComponentProps<typeof Card>) {
           </FieldGroup>
         </form>
       </CardContent>
-      <CardFooter>
-        <Button form="login-form" type="submit" className="flex justify-end">
-          Submit
+      <CardFooter className="flex flex-col gap-5 justify-end">
+        <Button form="login-form" type="submit" className="w-full">
+          Register
+        </Button>
+        <Button
+          className="w-full"
+          onClick={() => handleGoogleLogin()}
+          variant="outline"
+          type="button"
+        >
+          Continue with Google
         </Button>
       </CardFooter>
     </Card>
