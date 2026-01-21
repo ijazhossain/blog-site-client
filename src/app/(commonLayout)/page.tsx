@@ -4,9 +4,7 @@ import { BlogPost } from "@/types";
 
 export default async function Home() {
   const { data } = await blogService.getBlogPosts(
-    {
-      search: "",
-    },
+    { isFeatured: false },
     {
       cache: "no-store",
       revalidate: 5000,
