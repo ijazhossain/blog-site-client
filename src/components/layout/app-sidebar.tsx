@@ -20,6 +20,7 @@ import { userRoutes } from "@/app/routes/userRoutes";
 import { Route } from "@/types";
 import { SearchForm } from "./search-form";
 import { VersionSwitcher } from "./version-switcher";
+import { Roles } from "@/constants/roles";
 
 // This is sample data.
 const data = {
@@ -50,10 +51,10 @@ export function AppSidebar({
 }) {
   let routes: Route[]  = [];
   switch (user.role) {
-    case "admin":
+    case Roles.admin:
       routes = adminRoutes;
       break;
-    case "user":
+    case Roles.user:
       routes = userRoutes;
       break;
     default:
@@ -62,13 +63,7 @@ export function AppSidebar({
   }
   return (
     <Sidebar {...props}>
-      <SidebarHeader>
-        <VersionSwitcher
-          versions={data.versions}
-          defaultVersion={data.versions[0]}
-        />
-        <SearchForm />
-      </SidebarHeader>
+      
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
         {routes.map((item) => (

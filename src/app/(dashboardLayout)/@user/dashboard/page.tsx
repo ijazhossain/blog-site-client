@@ -1,8 +1,8 @@
+import { redirect } from "next/navigation";
+
 function DashboardPage() {
-  return (
-    <div>
-      <h1>User dashboard</h1>
-    </div>
+  return redirect("/dashboard/create-blog"
+    
   );
 }
 
