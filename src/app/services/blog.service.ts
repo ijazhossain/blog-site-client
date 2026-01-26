@@ -1,5 +1,6 @@
 import { env } from "@/env";
 import { revalidateTag } from "next/cache";
+import { cookies } from "next/headers";
 interface ServiceOptions {
   cache?: RequestCache;
   revalidate?: number;
@@ -8,6 +9,11 @@ interface ServiceOptions {
 interface GetBlogsParams {
   isFeatured?: boolean;
   search?: string;
+}
+export interface BlogData {
+  title: string;
+  content: string;
+  tag?: string[];
 }
 const API_URL = env.API_URL;
 export const blogService = {
@@ -43,8 +49,8 @@ export const blogService = {
       }) */
       const res = await fetch(url.toString(), config);
       const data = await res.json();
-        // console.log(data);
-     
+      // console.log(data);
+
       return { data: data, error: null };
     } catch (err) {
       return { data: null, error: { message: "Something went wrong" } };
@@ -59,4 +65,27 @@ export const blogService = {
       return { data: null, error: { message: "Something went wrong" } };
     }
   },
+  createBlogPost:async(blogData:BlogData)=>{
+    try {
+        const cookieStore=await cookies();
+        const res=await fetch(`${API_URL}/posts`,{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json",
+                Cookie:cookieStore.toString(),
+            },
+            body:JSON.stringify(blogData),
+        });
+        const data=await res.json();
+        if(data.error){
+            return {
+                 data: null,
+          error: { message: "Error: Post not created." },
+            }
+        }
+        return { data: data, error: null };
+    } catch (err) {
+       return { data: null, error: { message: "Something Went Wrong" } }; 
+    }
+  }
 };
