@@ -3,14 +3,8 @@ import BlogCard from "@/components/modules/homepage/BlogCard";
 import { BlogPost } from "@/types";
 
 export default async function Home() {
-  const { data } = await blogService.getBlogPosts(
-    { isFeatured: false },
-    {
-      cache: "no-store",
-      revalidate: 5000,
-    },
-  );
-  console.log("data from home", data);
+  const { data } = await blogService.getBlogPosts({ isFeatured: false });
+  // console.log("data from home", data);
 
   return (
     <div className="grid grid-cols-3 max-w-7xl mx-auto px-4 gap-5">

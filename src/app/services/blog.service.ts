@@ -1,4 +1,5 @@
 import { env } from "@/env";
+import { revalidateTag } from "next/cache";
 interface ServiceOptions {
   cache?: RequestCache;
   revalidate?: number;
@@ -33,10 +34,17 @@ export const blogService = {
       if (options?.revalidate) {
         config.next = { revalidate: options.revalidate };
       }
+      config.next = { ...config.next, tags: ["blogPosts"] };
 
+      /* const res=await fetch(url.toString(), {
+        next:{
+            tags:["blogPosts",]
+        }
+      }) */
       const res = await fetch(url.toString(), config);
       const data = await res.json();
-      //   console.log(data);
+        // console.log(data);
+     
       return { data: data, error: null };
     } catch (err) {
       return { data: null, error: { message: "Something went wrong" } };
