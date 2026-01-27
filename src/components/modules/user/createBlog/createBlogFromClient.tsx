@@ -58,7 +58,7 @@ function CreateBlogFromClient() {
       try {
         const res = await createBlogPost(blogData);
 
-        console.log(res);
+        // console.log(res);
 
         if (res.error) {
           toast.error(res.error.message, { id: toastId });
@@ -158,7 +158,7 @@ function CreateBlogFromClient() {
         </form>
       </CardContent>
       <CardFooter>
-        <Button form="blog-form" type="submit" className="w-full">
+        <Button form="blog-post" type="submit" className="w-full">
           Submit
         </Button>
       </CardFooter>

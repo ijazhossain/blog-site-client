@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 function AboutPage() {
   const [data, setData] = useState();
   const [error, setError] = useState<{ message: string } | null>(null);
-  console.log(data);
+  // console.log(data);
   useEffect(() => {
     (async () => {
       const { data, error } = await getBlogs();
