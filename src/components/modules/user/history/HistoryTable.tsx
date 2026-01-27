@@ -21,7 +21,7 @@ function HistoryTable({posts}:{posts:BlogPost[]}) {
             <TableHead>Title</TableHead>
             <TableHead>Tags</TableHead>
             <TableHead>Views</TableHead>
-            <TableHead>Features</TableHead>
+            <TableHead>Comments</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -30,7 +30,7 @@ function HistoryTable({posts}:{posts:BlogPost[]}) {
                     <TableCell>{item.title}</TableCell>
                     <TableCell>{item.tags}</TableCell>
                     <TableCell>{item.views}</TableCell>
-                    <TableCell>{item?.isFeatured}</TableCell>
+                    <TableCell>{item?._count?.comments}</TableCell>
                 </TableRow>
             ))}
             
